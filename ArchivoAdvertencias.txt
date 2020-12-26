@@ -1,0 +1,11 @@
+Día(1).
+Advertencia(Exceso de calorías). Excede en: 103,3%.
+Advertencia(Almuerzo y merienda).
+Día(2).
+Advertencia(Exceso de calorías). Excede en: 31,0%.
+Advertencia(Almuerzo y merienda).
+Día(3).
+Advertencia(Exceso de calorías). Excede en: 87,5%.
+Día(4).
+Advertencia(Bajo en calorías). Bajo en: 3,1%.
+Advertencia(No hay almuerzo).

@@ -1,0 +1,152 @@
+PARSER_BEGIN(TallerLP) 
+import java.io.*;					//Uso de input output para archivos
+
+public class TallerLP{
+
+	/*Funcion que verifica si un caracter es numerico.
+		@srtNum: se ingresa por parametro un string.
+		@return: retorna true si es numerico. False es letra.	
+	*/	
+	public static boolean isNumeric(String strNum) {
+    	if (strNum == null) {
+			return false;
+		}
+    		try {
+        	double d = Double.parseDouble(strNum);
+    	} catch (NumberFormatException nfe) {
+        	return false;
+    	}
+    	return true;
+	}
+
+	/*Funcion que recorre un string y obtiene las cantidades numericas de dicho string.
+		@linea: se ingresa por parametro un string.
+		@return numero: retorna el numero obtenido de la linea de caracteres.	
+	*/	
+	public static double obtenerCantidad(String linea){
+	  	String numeroString = "";
+	  	double numero = 0;
+		for(int i = 0;i<linea.length();i++) {
+			String letra = String.valueOf(linea.charAt(i));
+			if(isNumeric(letra)){
+				numeroString += linea.charAt(i);
+			}
+		}
+		numero = Double.parseDouble(numeroString);
+		return numero;
+	}
+	
+	/*Funcion principal.
+		@void.
+	*/	
+	public static void main(String[] args) throws IOException {
+        String LineaEntera = "";
+		int[] dias = new int[30];										//Vector para almacenar las calorias diarias.
+		int[] meriendas = new int[30];									//Vector que contabiliza las meriendas.
+		int[] almuerzos = new int[30];									//Vector que contabiliza los almuerzos.
+        for(int i = 0; i<=29;i++) {										//Iteración por los 30 dias.
+          	int cantidad = 0;											//Variable para almacenar el total diario de calorias.
+          	int merienda = 0;											//Variable para almacenar el total de meriendas diarias.
+          	int almuerzo = 0;											//Variable para almacenar el total de almuerzos diarios.
+			try { 														//Excepcion para controlar errores de lectura de archivo.
+	            FileReader f = new FileReader("Día"+(i+1)+".txt");		
+	        	BufferedReader bf = new BufferedReader(f);
+	            String Linea = bf.readLine();
+	            cantidad += obtenerCantidad(Linea);
+                while(Linea != null) {
+                  	LineaEntera += Linea;
+                   	Linea = bf.readLine();
+                   	cantidad += obtenerCantidad(Linea);					//Funcion obtenerCantidad retorna las calorias por linea leida.
+                   	if(Linea.charAt(0) == '%') {						//Condicion para obtener las meriendas.
+						merienda++;				
+                   	}
+                   	if(Linea.charAt(0) == '(') {						//Condicion para obtener los almuerzos.
+						almuerzo++;
+                   	}
+                }
+	        	f.close();
+	  		}catch(Throwable e){ }
+	  		dias[i] = cantidad;											//Se almacena el total de calorias en el vector aosciado a un dia.
+	  		meriendas[i] = merienda;									//Se almacena el total de meriendas en el vector aosciado a un dia.
+	  		almuerzos[i] = almuerzo;									//Se almacena el total de almuerzos en el vector aosciado a un dia.
+	 	} 	
+  		try{
+			new TallerLP(new java.io.StringReader(LineaEntera)).sintaxis();	//Se envia todo el texto de un archivo a la funcion sintaxis para verificar mediante expresion regular.
+			System.out.println("La sintaxis es CORRECTA");
+		}catch(Throwable e){													//Si la sintaxis no es correcta se cierra el programa.
+			System.out.println("Hay un ERROR en la sintaxis: "+ e.getMessage());
+			System.exit(0);
+		}
+		FileWriter calorias = null;												//Se crea una variable para el archivo calorias y se asigna null
+        PrintWriter printLinea = null;											//Se crea una variable para las lineas del archivo calorias y se asigna null
+        try{																	//Excepcion para controlar errores de escritura en el archivo.
+            calorias = new FileWriter("ArchivoCalorias.txt");					//se le asigna a la variable calorias un nuevo archivo
+            printLinea = new PrintWriter(calorias);
+            for (int i = 0; i <= 29; i++) {										//Iteracion para recorrer los 30 dias.
+       			if(dias[i] > 0) {
+					printLinea.println("Día(" + (i + 1) + ").");				//Escritura en el archivo.
+            	    printLinea.println("TotalCalorias(" + dias[i] + ").");
+          		}
+      		}
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+           try {
+           if (null != calorias)
+              calorias.close();
+           } catch (Exception e2) {
+              e2.printStackTrace();
+           }
+        }
+        FileWriter advertencia = null;											//Se crea una variable para el archivo advertencias y se asigna null.
+        printLinea = null;														//Se setea la variable printLinea a null.
+        try
+        {
+            advertencia = new FileWriter("ArchivoAdvertencias.txt");			//Se le asigna a la variable advertencia un nuevo archivo.
+            printLinea = new PrintWriter(advertencia);							//Se le asigna a la variable printLinea una linea del archivo advertencia.
+
+            for (int i = 0; i <= 29; i++) {										//Iteracion para recorrer los 30 dias.
+              	if(dias[i] > 0) {												//Condicion para calorias diarias mayores a 0 (si es 0 el dia no tiene datos)
+ 					if(dias[i] > 1200 || dias[i] < 800 || almuerzos[i] == 0 || meriendas[i] > 2 || ((almuerzos[i] > 0) && (meriendas[i] > 0))) {	//Condiciones para imprimir advertencias
+						printLinea.println("Día(" + (i + 1) + ").");
+						if(dias[i] > 1200) {
+					  		double exceso = ((dias[i] - 1200) / 1200.0) * 100.0;
+							printLinea.println("Advertencia(Exceso de calorías). Excede en: " + String.format("%.1f", exceso) + "%.");
+						}
+						if(dias[i] < 800) {
+							double deficit = ((800 - dias[i]) / 800.0) * 100.0;
+							printLinea.println("Advertencia(Bajo en calorías). Bajo en: " + String.format("%.1f", deficit) + "%.");
+	
+						}
+						if(meriendas[i] > 2) { printLinea.println("Advertencia(Se merendo "+meriendas[i]+" veces)."); }
+						if(almuerzos[i] == 0) { printLinea.println("Advertencia(No hay almuerzo)."); }
+						if((almuerzos[i] > 0) && (meriendas[i] > 0)) { printLinea.println("Advertencia(Almuerzo y merienda)."); }
+              		}
+            	}
+      		}
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+           try {
+           if (null != advertencia)
+              advertencia.close();
+           } catch (Exception e2) {
+              e2.printStackTrace();
+           }
+        }
+    }
+}
+PARSER_END(TallerLP)
+
+SKIP: { " " | "\t" | "\n" | "\r" }			//Caracteres no considerados en la expresion regular
+TOKEN: {
+	
+<DESAYUNO:		("{"["A"-"Z"](["a"-"z"])+"}""{"(["0"-"9"])+" "("kj"|"kcal")+"}")>		//ER para el Desayuno
+| <ALMUERZO:	("("["A"-"Z"](["a"-"z"])+")""("(["0"-"9"])+" "("kj"|"kcal")+")")>		//ER para el Almuerzo
+| <CENA:		("["["A"-"Z"](["a"-"z"])+"]""["(["0"-"9"])+" "("kj"|"kcal")+"]")>		//ER para el Cena
+| <MERIENDA:	("%"["A"-"Z"](["a"-"z"])+"%"(["0"-"9"])+" "("kj"|"kcal")+"%")>			//ER para el Merienda
+
+}
+
+void sintaxis():	{} { (type())* <EOF> }
+void type():	{} {< DESAYUNO >|< ALMUERZO >|< CENA >|< MERIENDA >}

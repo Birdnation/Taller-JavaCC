@@ -1,0 +1,6 @@
+(Fideos)(400 kcal)
+[Cafe][70 kcal]
+{Mermelada}{110 kj}
+{Cafe}{70 kj}
+(Salsa)(250 kcal)
+[Pan][100 kcal]

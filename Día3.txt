@@ -1,0 +1,7 @@
+(Arroz)(800 kcal)
+(Bistec)(790 kcal)
+[Te][25 kcal]
+{Galleta}{200 kj}
+{Te}{25 kj}
+(Ensalada)(150 kcal)
+[Pan][260 kcal]

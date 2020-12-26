@@ -1,0 +1,10 @@
+Día(1).
+TotalCalorias(2440).
+Día(2).
+TotalCalorias(1572).
+Día(3).
+TotalCalorias(2250).
+Día(4).
+TotalCalorias(775).
+Día(5).
+TotalCalorias(1000).

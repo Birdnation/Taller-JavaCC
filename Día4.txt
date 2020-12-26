@@ -1,0 +1,5 @@
+(Cazuela)(550 kcal)
+[Te][25 kcal]
+{Pan}{100 kj}
+{Te}{25 kj}
+[Manzana][75 kcal]

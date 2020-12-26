@@ -1,0 +1,8 @@
+(Fideos)(1000 kcal)
+(Cazuela)(550 kcal)
+[Te][25 kcal]
+{Mermelada}{150 kj}
+{Cafe}{250 kj}
+%Completo%300 kcal%
+(Papas)(100 kcal)
+[Mantequilla][65 kcal]

@@ -1,0 +1,7 @@
+(Papas)(450 kcal)
+(Pollo)(860 kcal)
+[Agua][2 kcal]
+{Queso}{150 kj}
+{Te}{15 kj}
+%Galleton%20 kcal%
+[Manzana][75 kcal]
